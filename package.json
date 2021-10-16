@@ -8,13 +8,14 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "generate-rn-styles": "npx trnc-create-styles"
+    "gen-styles": "npx trnc-create-styles"
   },
   "dependencies": {
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.4",
     "react": "17.0.2",
     "react-native": "0.66.0",
+    "react-native-config": "^1.4.4",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",
     "tailwind-react-native-classnames": "^1.5.1"

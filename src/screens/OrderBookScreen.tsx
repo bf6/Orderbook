@@ -1,24 +1,54 @@
 import React from 'react';
-import { Button, Text, View } from 'react-native';
-import { Products } from '../constants';
+import { Text, View } from 'react-native';
+import { Button } from '../components';
+import { Product } from '../constants';
 import { tw } from '../lib';
-import { OrderBookScreenProps } from '../types';
+import { ProductContext } from '../providers/Products';
+import { OrderBookScreenProps, TabulatedOrders } from '../types';
+
+type OrderBookProps = {
+  bids: TabulatedOrders;
+  asks: TabulatedOrders;
+};
+const OrderBook: React.FC<OrderBookProps> = ({ bids, asks }) => {
+  return (
+    <View style={tw`max-h-40 overflow-hidden`}>
+      <View style={tw`flex items-end w-1/2`}>
+        <Text style={tw`text-gray-500 font-bold`}>PRICE</Text>
+        {asks.map(priceLevel => (
+          <Text style={tw`text-white`}>{priceLevel[0].toFixed(2)}</Text>
+        ))}
+      </View>
+    </View>
+  );
+};
 
 const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
-  const [product, setProduct] = React.useState<Products>(
+  const [productId, setProductId] = React.useState<Product>(
     route.params.productId,
   );
+  const { subscribe, ready, data } = React.useContext(ProductContext);
 
   const toggleProduct = () => {
-    setProduct(current =>
-      current === Products.BTC ? Products.ETH : Products.BTC,
+    setProductId(current =>
+      current === Product.BTC ? Product.ETH : Product.BTC,
     );
   };
 
+  React.useEffect(() => {
+    if (ready) {
+      subscribe(productId);
+    }
+  }, [productId, ready, subscribe]);
+
   return (
-    <View>
-      <Text style={tw`white`}>{product}</Text>
-      <Button onPress={toggleProduct} title="Toggle Product" />
+    <View style={tw`flex`}>
+      <Text style={tw`text-white text-lg font-body mx-4 my-1 self-start`}>
+        Order Book
+      </Text>
+      <View style={tw`border border-t-0 border-gray-500 w-full`} />
+      {ready && data && <OrderBook bids={data?.bids} asks={data?.asks} />}
+      <Button onPress={toggleProduct} title="Toggle Feed" />
     </View>
   );
 };

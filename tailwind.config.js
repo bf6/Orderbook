@@ -5,7 +5,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        lavender: 'rgb(87, 65, 217)',
         'dark-blue': 'rgb(17, 24, 39)',
+      },
+      fontFamily: {
+        body: 'Jost-Regular',
       },
     },
   },

@@ -1,2 +1,2 @@
 export { tw } from './tailwind';
-export { Colors, Theme } from './theme';
+export { Theme } from './theme';

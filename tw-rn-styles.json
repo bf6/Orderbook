@@ -5730,6 +5730,13 @@
     "borderBottomColor": "rgba(131, 24, 67, var(--tw-border-opacity))",
     "borderLeftColor": "rgba(131, 24, 67, var(--tw-border-opacity))"
   },
+  "border-lavender": {
+    "--tw-border-opacity": 1,
+    "borderTopColor": "rgba(87, 65, 217, var(--tw-border-opacity))",
+    "borderRightColor": "rgba(87, 65, 217, var(--tw-border-opacity))",
+    "borderBottomColor": "rgba(87, 65, 217, var(--tw-border-opacity))",
+    "borderLeftColor": "rgba(87, 65, 217, var(--tw-border-opacity))"
+  },
   "border-dark-blue": {
     "--tw-border-opacity": 1,
     "borderTopColor": "rgba(17, 24, 39, var(--tw-border-opacity))",
@@ -6112,6 +6119,10 @@
   "bg-pink-900": {
     "--tw-bg-opacity": 1,
     "backgroundColor": "rgba(131, 24, 67, var(--tw-bg-opacity))"
+  },
+  "bg-lavender": {
+    "--tw-bg-opacity": 1,
+    "backgroundColor": "rgba(87, 65, 217, var(--tw-bg-opacity))"
   },
   "bg-dark-blue": {
     "--tw-bg-opacity": 1,
@@ -7108,6 +7119,9 @@
   "font-mono": {
     "fontFamily": "ui-monospace"
   },
+  "font-body": {
+    "fontFamily": "Jost-Regular"
+  },
   "text-xs": {
     "fontSize": 12,
     "lineHeight": 16
@@ -7584,6 +7598,10 @@
   "text-pink-900": {
     "--tw-text-opacity": 1,
     "color": "rgba(131, 24, 67, var(--tw-text-opacity))"
+  },
+  "text-lavender": {
+    "--tw-text-opacity": 1,
+    "color": "rgba(87, 65, 217, var(--tw-text-opacity))"
   },
   "text-dark-blue": {
     "--tw-text-opacity": 1,
@@ -8117,6 +8135,10 @@
     "--tw-ring-opacity": 1,
     "--tw-ring-color": "rgba(131, 24, 67, var(--tw-ring-opacity))"
   },
+  "ring-lavender": {
+    "--tw-ring-opacity": 1,
+    "--tw-ring-color": "rgba(87, 65, 217, var(--tw-ring-opacity))"
+  },
   "ring-dark-blue": {
     "--tw-ring-opacity": 1,
     "--tw-ring-color": "rgba(17, 24, 39, var(--tw-ring-opacity))"
@@ -8429,6 +8451,9 @@
   },
   "ring-offset-pink-900": {
     "--tw-ring-offset-color": "#831843"
+  },
+  "ring-offset-lavender": {
+    "--tw-ring-offset-color": "rgb(87, 65, 217)"
   },
   "ring-offset-dark-blue": {
     "--tw-ring-offset-color": "rgb(17, 24, 39)"
