@@ -39,7 +39,7 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
           style={tw`text-gray-300 text-lg font-body mx-4 my-1 self-start tracking-tight font-semibold`}>
           Order Book
         </Text>
-        <Divider />
+        <Divider style={tw`mb-2`} />
       </View>
       {showOrderBook ? (
         <OrderBook orderBook={data.get(productId)!} />

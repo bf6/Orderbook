@@ -19,11 +19,11 @@ export const Cell = ({
 );
 
 export const Row = ({ children }: { children: React.ReactNode }) => (
-  <View style={tw`flex-row py-0.5`}>{children}</View>
+  <View style={tw`flex-grow flex-row`}>{children}</View>
 );
 
 export const Table = ({ children }: { children: React.ReactNode }) => (
-  <View style={tw`my-2 flex-1 overflow-hidden flex-col justify-start`}>
+  <View style={tw`flex-1 overflow-hidden flex-col justify-start`}>
     {children}
   </View>
 );
