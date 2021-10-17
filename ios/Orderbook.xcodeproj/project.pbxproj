@@ -32,6 +32,8 @@
 		EA87655C996949E19B860752 /* Jost-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F5C676592E7B4968B1746E3A /* Jost-Italic.ttf */; };
 		F4DB620B814A46F69D4B394A /* Jost-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B6E70CD478941A48FF4F46C /* Jost-ExtraLight.ttf */; };
 		FA3AABD41503484FAEB4DCD7 /* Jost-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 334566649456480FBE9AC1B9 /* Jost-ExtraBoldItalic.ttf */; };
+		6BC0093A40A6464581F96344 /* RobotoMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DD70653A53B24E01838C657C /* RobotoMono-Bold.ttf */; };
+		935B082DBC3049179149B54D /* RobotoMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F0844D4B6819493D999D37BB /* RobotoMono-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +82,8 @@
 		E60B144CBCC64E1A903A147A /* Jost-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Jost-Medium.ttf"; path = "../assets/fonts/Jost/Jost-Medium.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F5C676592E7B4968B1746E3A /* Jost-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Jost-Italic.ttf"; path = "../assets/fonts/Jost/Jost-Italic.ttf"; sourceTree = "<group>"; };
+		DD70653A53B24E01838C657C /* RobotoMono-Bold.ttf */ = {isa = PBXFileReference; name = "RobotoMono-Bold.ttf"; path = "../assets/fonts/Roboto Mono/RobotoMono-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F0844D4B6819493D999D37BB /* RobotoMono-Regular.ttf */ = {isa = PBXFileReference; name = "RobotoMono-Regular.ttf"; path = "../assets/fonts/Roboto Mono/RobotoMono-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +199,8 @@
 				3654E89A52EB4D31B500D45F /* Jost-SemiBoldItalic.ttf */,
 				27916EC260114E64BC810A55 /* Jost-Thin.ttf */,
 				9CA469F383F64F8E986DF26E /* Jost-ThinItalic.ttf */,
+				DD70653A53B24E01838C657C /* RobotoMono-Bold.ttf */,
+				F0844D4B6819493D999D37BB /* RobotoMono-Regular.ttf */,
 			);
 			name = Resources;
 			path = "";
@@ -326,6 +332,8 @@
 				04F08D1C4D494208A8CA53D8 /* Jost-SemiBoldItalic.ttf in Resources */,
 				96440EE7E130403AB3CE28AC /* Jost-Thin.ttf in Resources */,
 				81D1AAA6236E4D45BD1E5A92 /* Jost-ThinItalic.ttf in Resources */,
+				6BC0093A40A6464581F96344 /* RobotoMono-Bold.ttf in Resources */,
+				935B082DBC3049179149B54D /* RobotoMono-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

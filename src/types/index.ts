@@ -18,15 +18,19 @@ export enum OrderSide {
 export type Order = [price: number, size: number];
 export type TabulatedOrders = [...order: Order, total: number][];
 
-export type OrderBook = {
+export type OrderBookType = {
   bids: TabulatedOrders;
   asks: TabulatedOrders;
-  spread: number;
+  spread: number | null;
+  maxTotal: number;
 };
 
-export type TProductContext = {
+export type OrderBookData = Map<Product, OrderBookType>;
+
+export type ProductContextType = {
   subscribe(productId: Product): void;
-  data: OrderBook | null;
+  unsubscribeAll(): void;
+  data: OrderBookData;
   ready: boolean;
 };
 
@@ -47,14 +51,14 @@ export type SnapshotMessage = {
   bids: Order[];
   numLevels: number;
   feed: 'book_ui_1_snapshot';
-  productId: Product;
+  product_id: Product;
 };
 
 export type DeltaMessage = {
   asks: Order[];
   bids: Order[];
   feed: 'book_ui_1';
-  productId: Product;
+  product_id: Product;
 };
 
 export type ProductAPIMessage =

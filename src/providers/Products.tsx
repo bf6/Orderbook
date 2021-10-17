@@ -1,13 +1,15 @@
 import React from 'react';
 import { Product } from '../constants';
 import Config from 'react-native-config';
-import { TProductContext, OrderSide } from '../types';
+import { ProductContextType, OrderSide } from '../types';
 import { isDelta, isSnapshot } from '../types/guards';
-import { processOrders } from '../lib/math';
+import { calculateSpread, processOrders } from '../lib/math';
+import throttle from 'lodash.throttle';
 
-export const ProductContext = React.createContext<TProductContext>({
+export const ProductContext = React.createContext<ProductContextType>({
   subscribe: () => {},
-  data: null,
+  unsubscribeAll: () => {},
+  data: new Map(),
   ready: false,
 });
 
@@ -35,7 +37,6 @@ export const ProductProvider: React.FC = ({ children }) => {
     }
 
     unsubscribeAll();
-
     socketConn.current.send(
       JSON.stringify({
         event: 'subscribe',
@@ -58,32 +59,39 @@ export const ProductProvider: React.FC = ({ children }) => {
       setProductContext(prev => ({ ...prev, ready: false }));
     };
 
-    conn.onmessage = event => {
+    conn.onmessage = throttle(event => {
       // Parse the event data and update the order books
       const message = JSON.parse(event.data);
       if (isSnapshot(message) || isDelta(message)) {
+        let product = message.product_id;
         setProductContext(prev => {
           let asks = processOrders({
-            current: prev.data?.asks,
+            current: prev.data.get(product)?.asks,
             deltas: message.asks,
             side: OrderSide.SELL,
-          });
+          }).slice(-12);
+
           let bids = processOrders({
-            current: prev.data?.bids,
+            current: prev.data.get(product)?.bids,
             deltas: message.bids,
             side: OrderSide.BUY,
-          });
+          }).slice(0, 12);
+
+          let spread = calculateSpread(asks, bids);
+          // Max of all totals on both sides
+          let maxTotal = Math.max(
+            ...bids.map(o => o[2]),
+            ...asks.map(o => o[2]),
+          );
+          let data = new Map();
+          data.set(product, { asks, bids, spread, maxTotal });
           return {
             ...prev,
-            data: {
-              spread: asks[0][0] - bids[0][0],
-              asks,
-              bids,
-            },
+            data,
           };
         });
       }
-    };
+    }, 100);
 
     socketConn.current = conn;
 
@@ -94,11 +102,12 @@ export const ProductProvider: React.FC = ({ children }) => {
 
   const initialContext = {
     subscribe,
-    data: null,
+    unsubscribeAll,
+    data: new Map(),
     ready: false,
   };
   const [productContext, setProductContext] =
-    React.useState<TProductContext>(initialContext);
+    React.useState<ProductContextType>(initialContext);
 
   return (
     <ProductContext.Provider value={productContext}>

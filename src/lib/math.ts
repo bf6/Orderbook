@@ -19,6 +19,9 @@ export const tabulateOrders = (
     order[1],
     (runningTotal += order[1]),
   ]);
+  if (side === OrderSide.SELL) {
+    result.reverse();
+  }
   return result;
 };
 
@@ -65,5 +68,14 @@ export const processOrders = ({
     return applyDelta(current, deltas, side);
   } else {
     return tabulateOrders(deltas, side);
+  }
+};
+
+export const calculateSpread = (
+  bids: TabulatedOrders,
+  asks: TabulatedOrders,
+): number | undefined => {
+  if (bids.length && asks.length) {
+    return bids[0][0] - asks[0][0];
   }
 };

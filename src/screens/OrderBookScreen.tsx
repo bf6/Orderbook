@@ -1,33 +1,17 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { Button } from '../components';
+import { ActivityIndicator, Text, View } from 'react-native';
+import { Button, Divider, OrderBook } from '../components';
 import { Product } from '../constants';
 import { tw } from '../lib';
 import { ProductContext } from '../providers/Products';
-import { OrderBookScreenProps, TabulatedOrders } from '../types';
-
-type OrderBookProps = {
-  bids: TabulatedOrders;
-  asks: TabulatedOrders;
-};
-const OrderBook: React.FC<OrderBookProps> = ({ bids, asks }) => {
-  return (
-    <View style={tw`max-h-40 overflow-hidden`}>
-      <View style={tw`flex items-end w-1/2`}>
-        <Text style={tw`text-gray-500 font-bold`}>PRICE</Text>
-        {asks.map(priceLevel => (
-          <Text style={tw`text-white`}>{priceLevel[0].toFixed(2)}</Text>
-        ))}
-      </View>
-    </View>
-  );
-};
+import { OrderBookScreenProps } from '../types';
 
 const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
   const [productId, setProductId] = React.useState<Product>(
     route.params.productId,
   );
-  const { subscribe, ready, data } = React.useContext(ProductContext);
+  const { subscribe, ready, data, unsubscribeAll } =
+    React.useContext(ProductContext);
 
   const toggleProduct = () => {
     setProductId(current =>
@@ -35,20 +19,36 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
     );
   };
 
+  const showOrderBook = React.useMemo(() => {
+    return data?.get(productId) && data.get(productId)!.spread;
+  }, [data, productId]);
+
   React.useEffect(() => {
     if (ready) {
       subscribe(productId);
     }
-  }, [productId, ready, subscribe]);
+    return () => {
+      unsubscribeAll();
+    };
+  }, [productId, ready, subscribe, unsubscribeAll]);
 
   return (
-    <View style={tw`flex`}>
-      <Text style={tw`text-white text-lg font-body mx-4 my-1 self-start`}>
-        Order Book
-      </Text>
-      <View style={tw`border border-t-0 border-gray-500 w-full`} />
-      {ready && data && <OrderBook bids={data?.bids} asks={data?.asks} />}
-      <Button onPress={toggleProduct} title="Toggle Feed" />
+    <View style={tw`relative flex-1 justify-between`}>
+      <View>
+        <Text
+          style={tw`text-gray-300 text-lg font-body mx-4 my-1 self-start tracking-tight font-semibold`}>
+          Order Book
+        </Text>
+        <Divider />
+      </View>
+      {showOrderBook ? (
+        <OrderBook orderBook={data.get(productId)!} />
+      ) : (
+        <ActivityIndicator />
+      )}
+      <View style={tw`flex flex-row justify-center py-3 bg-dark-blue`}>
+        <Button onPress={toggleProduct} title="Toggle Feed" />
+      </View>
     </View>
   );
 };
