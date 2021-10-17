@@ -8,6 +8,9 @@ Other libraries used:
 - [React Navigation](https://reactnavigation.org/docs/getting-started)
 
 
+https://user-images.githubusercontent.com/7946260/137643975-9d735ad4-930e-49e6-a5fa-7222a7a2af68.mp4
+
+
 ## Running locally
 ```
 yarn install
