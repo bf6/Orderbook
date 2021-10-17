@@ -76,6 +76,7 @@ export const calculateSpread = (
   asks: TabulatedOrders,
 ): number | undefined => {
   if (bids.length && asks.length) {
-    return bids[0][0] - asks[0][0];
+    // lowest ask - highest bid
+    return asks[asks.length - 1][0] - bids[0][0];
   }
 };

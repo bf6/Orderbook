@@ -1,5 +1,5 @@
 import 'react-native';
-import { applyDelta, tabulateOrders } from '../src/lib/math';
+import { applyDelta, calculateSpread, tabulateOrders } from '../src/lib/math';
 import { Order, OrderSide, TabulatedOrders } from '../src/types';
 
 describe('applyDelta', () => {
@@ -76,5 +76,25 @@ describe('tabulateOrder', () => {
       [60957.0, 7000, 8500],
       [60950.0, 1500, 1500],
     ]);
+  });
+});
+
+describe('calculateSpread', () => {
+  let bids: TabulatedOrders;
+  let asks: TabulatedOrders;
+  beforeEach(() => {
+    asks = [
+      [60958.5, 2000, 10500],
+      [60957.0, 7000, 8500],
+      [60950.0, 1500, 1500],
+    ];
+    bids = [
+      [60949.5, 3000, 3000],
+      [60948.0, 2000, 5000],
+      [60947.5, 1000, 6000],
+    ];
+  });
+  it('calculates the spread correctly', () => {
+    expect(calculateSpread(bids, asks)).toEqual(0.5);
   });
 });

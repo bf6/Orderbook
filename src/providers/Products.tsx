@@ -77,7 +77,7 @@ export const ProductProvider: React.FC = ({ children }) => {
             side: OrderSide.BUY,
           }).slice(0, 12);
 
-          let spread = calculateSpread(asks, bids);
+          let spread = calculateSpread(bids, asks);
           // Max of all totals on both sides
           let maxTotal = Math.max(
             ...bids.map(o => o[2]),
