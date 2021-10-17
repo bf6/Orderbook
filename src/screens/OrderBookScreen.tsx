@@ -7,8 +7,7 @@ import {
   AppStateStatus,
   NativeEventSubscription,
 } from 'react-native';
-import { Button, Divider, OrderBook } from '../components';
-import { ReconnectModal } from '../components/ReconnectModal';
+import { Button, Divider, OrderBook, ReconnectModal } from '../components';
 import { Product } from '../constants';
 import { tw } from '../lib';
 import { ProductContext } from '../providers/Products';
@@ -32,13 +31,6 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
     );
   };
 
-  const handleAppStateChange = (nextAppState: AppStateStatus) => {
-    if (nextAppState == 'background') {
-      unsubscribeAll();
-      setShowReconnectModal(true);
-    }
-  };
-
   const reconnect = () => {
     subscribe(productId);
     setShowReconnectModal(false);
@@ -60,13 +52,18 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
   React.useEffect(() => {
     appStateSubscription.current = AppState.addEventListener(
       'change',
-      handleAppStateChange,
+      (nextAppState: AppStateStatus) => {
+        if (nextAppState === 'background') {
+          unsubscribeAll();
+          setShowReconnectModal(true);
+        }
+      },
     );
 
     return () => {
       appStateSubscription.current?.remove();
     };
-  }, []);
+  }, [unsubscribeAll]);
 
   return (
     <View style={tw`flex-1 justify-between`}>
