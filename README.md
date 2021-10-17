@@ -7,7 +7,9 @@ Other libraries used:
 - [TailwindCSS](https://github.com/jaredh159/tailwind-react-native-classnames)
 - [React Navigation](https://reactnavigation.org/docs/getting-started)
 
-https://user-images.githubusercontent.com/7946260/137644558-f899f088-2285-4b51-948a-7a9fec1b519a.mp4
+## Demo
+[demo.mp4](https://user-images.githubusercontent.com/7946260/137645787-3aee665e-7d11-416e-b432-b096ac080d33.mp4)
+
 
 ## Running locally
 ```
