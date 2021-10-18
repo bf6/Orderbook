@@ -4,7 +4,6 @@ import Config from 'react-native-config';
 import { ProductContextType, OrderSide } from '../types';
 import { isDelta, isSnapshot } from '../types/guards';
 import { calculateSpread, processOrders } from '../lib/math';
-import throttle from 'lodash.throttle';
 
 export const ProductContext = React.createContext<ProductContextType>({
   subscribe: () => {},
@@ -47,56 +46,61 @@ export const ProductProvider: React.FC = ({ children }) => {
   };
 
   React.useEffect(() => {
-    let conn = new WebSocket(Config.PRODUCTS_API_URL);
+    const initialize = () => {
+      let conn = new WebSocket(Config.PRODUCTS_API_URL);
 
-    conn.onopen = () => {
-      console.log('Socket connection opened');
-      setProductContext(prev => ({ ...prev, ready: true }));
+      conn.onopen = () => {
+        console.log('Socket connection opened');
+        setProductContext(prev => ({ ...prev, ready: true }));
+      };
+
+      conn.onclose = () => {
+        console.log('Socket connection closed');
+        setProductContext(prev => ({ ...prev, ready: false }));
+        initialize();
+      };
+
+      conn.onmessage = event => {
+        // Parse the event data and update the order books
+        const message = JSON.parse(event.data);
+        if (isSnapshot(message) || isDelta(message)) {
+          let product = message.product_id;
+          setProductContext(prev => {
+            let asks = processOrders({
+              current: prev.data.get(product)?.asks,
+              deltas: message.asks,
+              side: OrderSide.SELL,
+            }).slice(-12);
+
+            let bids = processOrders({
+              current: prev.data.get(product)?.bids,
+              deltas: message.bids,
+              side: OrderSide.BUY,
+            }).slice(0, 12);
+
+            let spread = calculateSpread(bids, asks);
+            // Max of all totals on both sides
+            let maxTotal = Math.max(
+              ...bids.map(o => o[2]),
+              ...asks.map(o => o[2]),
+            );
+            let data = new Map();
+            data.set(product, { asks, bids, spread, maxTotal });
+            return {
+              ...prev,
+              data,
+            };
+          });
+        }
+      };
+
+      socketConn.current = conn;
     };
 
-    conn.onclose = () => {
-      console.log('Socket connection closed');
-      setProductContext(prev => ({ ...prev, ready: false }));
-    };
-
-    conn.onmessage = throttle(event => {
-      // Parse the event data and update the order books
-      const message = JSON.parse(event.data);
-      if (isSnapshot(message) || isDelta(message)) {
-        let product = message.product_id;
-        setProductContext(prev => {
-          let asks = processOrders({
-            current: prev.data.get(product)?.asks,
-            deltas: message.asks,
-            side: OrderSide.SELL,
-          }).slice(-12);
-
-          let bids = processOrders({
-            current: prev.data.get(product)?.bids,
-            deltas: message.bids,
-            side: OrderSide.BUY,
-          }).slice(0, 12);
-
-          let spread = calculateSpread(bids, asks);
-          // Max of all totals on both sides
-          let maxTotal = Math.max(
-            ...bids.map(o => o[2]),
-            ...asks.map(o => o[2]),
-          );
-          let data = new Map();
-          data.set(product, { asks, bids, spread, maxTotal });
-          return {
-            ...prev,
-            data,
-          };
-        });
-      }
-    }, 100);
-
-    socketConn.current = conn;
+    initialize();
 
     return () => {
-      socketConn.current?.close();
+      unsubscribeAll();
     };
   }, []);
 

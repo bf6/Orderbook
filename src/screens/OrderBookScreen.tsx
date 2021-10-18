@@ -1,3 +1,4 @@
+import { throttle } from 'lodash';
 import React from 'react';
 import {
   ActivityIndicator,
@@ -11,7 +12,7 @@ import { Button, Divider, OrderBook, ReconnectModal } from '../components';
 import { Product } from '../constants';
 import { tw } from '../lib';
 import { ProductContext } from '../providers/Products';
-import { OrderBookScreenProps } from '../types';
+import { OrderBookData, OrderBookScreenProps } from '../types';
 
 const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
   const appStateSubscription = React.useRef<NativeEventSubscription | null>(
@@ -24,6 +25,8 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
   );
   const { subscribe, ready, data, unsubscribeAll } =
     React.useContext(ProductContext);
+  // Keep a local copy of the order data to throttle renders
+  const [localData, setLocalData] = React.useState<OrderBookData>(data);
 
   const toggleProduct = () => {
     setProductId(current =>
@@ -37,8 +40,16 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
   };
 
   const showOrderBook = React.useMemo(() => {
-    return data?.get(productId) && data.get(productId)?.spread;
-  }, [data, productId]);
+    return localData?.get(productId);
+  }, [localData, productId]);
+
+  const throttledSetLocalData = React.useMemo(() => {
+    return throttle(updated => setLocalData(updated), 100);
+  }, []);
+
+  React.useEffect(() => {
+    throttledSetLocalData(data);
+  }, [data, throttledSetLocalData]);
 
   React.useEffect(() => {
     if (ready) {
@@ -75,7 +86,7 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
         <Divider style={tw`mb-2`} />
       </View>
       {showOrderBook ? (
-        <OrderBook orderBook={data.get(productId)!} />
+        <OrderBook orderBook={localData.get(productId)!} />
       ) : (
         <ActivityIndicator />
       )}
