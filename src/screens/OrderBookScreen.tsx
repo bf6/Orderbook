@@ -47,10 +47,16 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
     return throttle(updated => setLocalData(updated), 100);
   }, []);
 
+  // Throttle updates
   React.useEffect(() => {
     throttledSetLocalData(data);
+
+    return () => {
+      throttledSetLocalData.cancel();
+    };
   }, [data, throttledSetLocalData]);
 
+  // Subscribe on mount and product toggle
   React.useEffect(() => {
     if (ready) {
       subscribe(productId);
@@ -60,6 +66,7 @@ const OrderBookScreen: React.FC<OrderBookScreenProps> = ({ route }) => {
     };
   }, [productId, ready, subscribe, unsubscribeAll]);
 
+  // Unsubscribe, and show reconnect modal on app background
   React.useEffect(() => {
     appStateSubscription.current = AppState.addEventListener(
       'change',

@@ -46,24 +46,29 @@ export const ProductProvider: React.FC = ({ children }) => {
   };
 
   React.useEffect(() => {
+    let isMounted = true;
     const initialize = () => {
       let conn = new WebSocket(Config.PRODUCTS_API_URL);
 
       conn.onopen = () => {
         console.log('Socket connection opened');
-        setProductContext(prev => ({ ...prev, ready: true }));
+        if (isMounted) {
+          setProductContext(prev => ({ ...prev, ready: true }));
+        }
       };
 
       conn.onclose = () => {
         console.log('Socket connection closed');
-        setProductContext(prev => ({ ...prev, ready: false }));
+        if (isMounted) {
+          setProductContext(prev => ({ ...prev, ready: false }));
+        }
         initialize();
       };
 
       conn.onmessage = event => {
         // Parse the event data and update the order books
         const message = JSON.parse(event.data);
-        if (isSnapshot(message) || isDelta(message)) {
+        if (isSnapshot(message) || (isDelta(message) && isMounted)) {
           let product = message.product_id;
           setProductContext(prev => {
             let asks = processOrders({
@@ -101,6 +106,7 @@ export const ProductProvider: React.FC = ({ children }) => {
 
     return () => {
       unsubscribeAll();
+      isMounted = false;
     };
   }, []);
 
