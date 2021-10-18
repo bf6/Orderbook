@@ -8,8 +8,7 @@ Other libraries used:
 - [React Navigation](https://reactnavigation.org/docs/getting-started)
 
 ## Demo
-[demo.mp4](https://user-images.githubusercontent.com/7946260/137645787-3aee665e-7d11-416e-b432-b096ac080d33.mp4)
-
+[demo.mp4](https://user-images.githubusercontent.com/7946260/137658654-f0bebe35-3931-4813-8a40-87be8ef90178.mp4)
 
 ## Running locally
 ```
